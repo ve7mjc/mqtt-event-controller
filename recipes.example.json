@@ -1,0 +1,147 @@
+[{
+	"name" : "ensuite light switch",
+	"event" : { 
+		"mqtt_topic" : "phidget/0/di/7/state",
+		"mqtt_payload" : "1"
+	},
+	"actions" : [{
+		"mqtt_action" : "toggle",
+		"mqtt_topic_state" : "phidget/0/do/12/state",
+		"mqtt_topic_set" : "phidget/0/do/12/set"
+	}]
+},
+{
+	"name" : "kitchen light switch",
+	"event" : { 
+		"mqtt_topic" : "phidget/0/di/10/state",
+		"mqtt_payload" : "1"
+	},
+	"actions" : [{
+		"mqtt_action" : "toggle",
+		"mqtt_topic_state" : "phidget/0/do/10/state",
+		"mqtt_topic_set" : "phidget/0/do/10/set"
+	}]
+},
+{
+	"name" : "living room light switch",
+	"event" : { 
+		"mqtt_topic" : "phidget/0/di/12/state",
+		"mqtt_payload" : "1"
+	},
+	"actions" : [{
+		"mqtt_action" : "toggle",
+		"mqtt_topic_state" : "phidget/0/do/11/state",
+		"mqtt_topic_set" : "phidget/0/do/11/set"
+	}]
+},
+{
+	"name" : "utility room light switch",
+	"event" : { 
+		"mqtt_topic" : "phidget/1/di/3/state",
+		"mqtt_payload" : "1"
+	},
+	"actions" : [{
+		"mqtt_action" : "toggle",
+		"mqtt_topic_state" : "phidget/0/do/9/state",
+		"mqtt_topic_set" : "phidget/0/do/9/set"
+	}]
+},
+{
+	"name" : "Master Bedroom light",
+	"event" : { 
+		"mqtt_topic" : "phidget/0/di/2/state",
+		"mqtt_payload" : "1"
+	},
+	"actions" : [{
+		"mqtt_action" : "toggle",
+		"mqtt_topic_state" : "phidget/0/do/7/state",
+		"mqtt_topic_set" : "phidget/0/do/7/set"
+	}]
+}
+,
+{
+	"name" : "Bedroom 2 Light Switch",
+	"event" : { 
+		"mqtt_topic" : "phidget/0/di/3/state",
+		"mqtt_payload" : "1"
+	},
+	"actions" : [{
+		"mqtt_action" : "toggle",
+		"mqtt_topic_state" : "phidget/0/do/8/state",
+		"mqtt_topic_set" : "phidget/0/do/8/set"
+	}]
+},
+{
+	"name" : "Bedroom 3 Light Switch",
+	"event" : { 
+		"mqtt_topic" : "phidget/0/di/4/state",
+		"mqtt_payload" : "1"
+	},
+	"actions" : [{
+		"mqtt_action" : "toggle",
+		"mqtt_topic_state" : "phidget/0/do/2/state",
+		"mqtt_topic_set" : "phidget/0/do/2/set"
+	}]
+},
+{
+	"name" : "Bedroom 4 Light Switch",
+	"event" : { 
+		"mqtt_topic" : "phidget/0/di/5/state",
+		"mqtt_payload" : "1"
+	},
+	"actions" : [{
+		"mqtt_action" : "toggle",
+		"mqtt_topic_state" : "phidget/0/do/3/state",
+		"mqtt_topic_set" : "phidget/0/do/3/set"
+	}]
+},
+{
+	"name" : "Rec Room Light Switch",
+	"event" : { 
+		"mqtt_topic" : "phidget/1/di/2/state",
+		"mqtt_payload" : "1"
+	},
+	"actions" : [{
+		"mqtt_action" : "toggle",
+		"mqtt_topic_state" : "phidget/0/do/4/state",
+		"mqtt_topic_set" : "phidget/0/do/4/set"
+	}]
+},
+{
+	"name" : "Laundry Room Light Switch",
+	"event" : { 
+		"mqtt_topic" : "phidget/0/di/11/state",
+		"mqtt_payload" : "1"
+	},
+	"actions" : [{
+		"mqtt_action" : "toggle",
+		"mqtt_topic_state" : "phidget/0/do/5/state",
+		"mqtt_topic_set" : "phidget/0/do/5/set"
+	}]
+},
+{
+	"name" : "Garage Light Switch",
+	"event" : { 
+		"mqtt_topic" : "phidget/1/di/0/state",
+		"mqtt_payload" : "1"
+	},
+	"actions" : [{
+		"mqtt_action" : "toggle",
+		"mqtt_topic_state" : "phidget/0/do/6/state",
+		"mqtt_topic_set" : "phidget/0/do/6/set"
+	}]
+}
+,
+{
+	"name" : "Downstairs Bathroom Light Switch",
+	"event" : { 
+		"mqtt_topic" : "phidget/0/di/9/state",
+		"mqtt_payload" : "1"
+	},
+	"actions" : [{
+		"mqtt_action" : "toggle",
+		"mqtt_topic_state" : "phidget/0/do/13/state",
+		"mqtt_topic_set" : "phidget/0/do/13/set"
+	}]
+}
+]
