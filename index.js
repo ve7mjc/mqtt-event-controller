@@ -1,23 +1,19 @@
-// HMI Adapter
-// Provide low level logic and control of house
-// eg. toggle buttons and loads
-
-// const MongoClient = require('mongodb').MongoClient;
-// const assert = require('assert');
-
 /*
 
-to support 
+MQTT Event Controller
 
-topic,payload -> action
-phidget/0/di/9/state 1
+2019 Matthew Currie VE7MJC
 
-allow multiple actions for one event
+React to low level events via MQTT messages
+
+eg. switches, buttons, and inputs controlling loads without the use of a 
+higher level automation controller
 
 */
 
 const recipesFile = "./recipes.json"
 
+const assert = require('assert');
 const mqtt = require('mqtt')
 
 var recipes = []
@@ -82,10 +78,13 @@ mqttc.on('message', function (topic, message) {
 				// MATCHED AN EVENT - PROCEED TO ACTIONS
 				console.log("Event \"" + topic + "\" matches recipe: " + recipe.name)
 				for (var action of recipe.actions) {
+					
 					// TODO - assuming we are a toggle
 					msg = ""
 					if (states[action.mqtt_topic_state]=="ON") msg = "OFF"
 					if (states[action.mqtt_topic_state]=="OFF") msg = "ON"
+					if (states[action.mqtt_topic_state]=="1") msg = "0"
+					if (states[action.mqtt_topic_state]=="0") msg = "1"
 
 					console.log(" - action: " + action.mqtt_topic_set + " -> " + msg)
 					mqttc.publish(action.mqtt_topic_set, msg, { retain : false, qos : 1 })
@@ -101,67 +100,6 @@ mqttc.on('message', function (topic, message) {
 		}
 		
 	}
-	
-	// find associated action state topic (state monitoring)
 
-	
-	
+
 })
-
-/* 
-
-const resetTimeoutTimer = function () {
-	// reset the timeout timer
-	if (!mqttReceiving) {
-		console.log("receiving data!")
-	} mqttReceiving = true
-	clearTimeout(mqttReceiveTimeoutTimer)
-	mqttReceiveTimeoutTimer = setTimeout(mqttReceiveTimeout, 5 * 1000)
-}
-
-
-
-var sendAlert = function(topic, message, urgency = 0) {
-    
-	var msg = {
-		message: message, // required
-		title: topic,
-		// sound: '',
-		// device: 'devicename',
-		
-        // By default, messages have normal priority (a priority of 0). 
-        // -2 Lowest (no sound, vibration, or popup)
-        // -1 Low (no sound or vibration)
-        //  0 Normal
-        //  1 High (bypasses quiet hours)
-        //  2 Emergency (repeats, requires ack) retry and expire parameters must be supplied
-		priority: urgency
-	}
-	
-	// urgency 2 requires additional parameters
-	if (urgency == 2) {
-	    msg["expire"] = 10800
-	    msg["retry"] = 30
-	    msg["sound"] = "alien"
-	}
-	
-	// iterate through list of user tokens
-	pushoverUserTokens.forEach(function(userToken) {
-	
-		var p = new Push( {
-			user: userToken,
-			token: pushoverAppToken,
-		})
-
-		p.send( msg, function( err, result ) {
-			if ( err ) {
-				throw err
-			}
-			console.log("pushover api result = " + result)
-		})
-		
-	});
-		
-}
-
-*/
