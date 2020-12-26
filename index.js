@@ -13,7 +13,7 @@ higher level automation controller
 
 const recipesFile = "./recipes.json"
 
-const assert = require('assert');
+const assert = require('assert')
 const mqtt = require('mqtt')
 
 var recipes = []
@@ -37,8 +37,11 @@ const loadRecipes = function() {
 		
 		for (var action of recipe.actions) {
 			// assume mqtt toggle
-			console.log(" - action: " + action.mqtt_topic_set + " -> toggle")
-			subscriptions.push(action.mqtt_topic_state)
+			// do not proceed if there is no state to subscribe to
+			if ("mqtt_topic_state" in action) {
+			    console.log(" - action: " + action.mqtt_topic_set + " -> toggle")
+			    subscriptions.push(action.mqtt_topic_state)
+		    }
 		}
 
 		// actions
@@ -73,21 +76,62 @@ mqttc.on('message', function (topic, message) {
 	for (var recipe of recipes) {
 		// check if topic matches recipe event
 		if (topic == recipe.event.mqtt_topic) {
-			// MESSAGE IS AN EVENT
+		    
+			// Does the payload of this message match our recipe filter?
 			if (message == recipe.event.mqtt_payload) {
+			    
 				// MATCHED AN EVENT - PROCEED TO ACTIONS
 				console.log("Event \"" + topic + "\" matches recipe: " + recipe.name)
 				for (var action of recipe.actions) {
 					
-					// TODO - assuming we are a toggle
-					msg = ""
-					if (states[action.mqtt_topic_state]=="ON") msg = "OFF"
-					if (states[action.mqtt_topic_state]=="OFF") msg = "ON"
-					if (states[action.mqtt_topic_state]=="1") msg = "0"
-					if (states[action.mqtt_topic_state]=="0") msg = "1"
+					// are we an MQTT ACTION?
+					if ("mqtt_action" in action) {
+					
+					    if (action.mqtt_action == "toggle") {
+					        
+        					// run through known binary values if toggle values
+        					// are not specified in the recipe
+        					msg = ""
+        					
+        					// account for case mismatch and whitespace
+        					filtered_topic = String(states[action.mqtt_topic_state]).toLowerCase().trim()
+        					
+        					switch (filtered_topic) {
+        						case "on":
+        							msg = "OFF"
+        							break;
+        						case "off":
+        							msg = "ON"
+        							break;
+        						case "high":
+        							msg = "LOW"
+        							break;
+        						case "low":
+        							msg = "HIGH"
+        							break;
+        						case "1":
+        							msg = "0"
+        							break;
+        						case "0":
+        							msg = "1"
+        							break;
+        						default:
 
-					console.log(" - action: " + action.mqtt_topic_set + " -> " + msg)
-					mqttc.publish(action.mqtt_topic_set, msg, { retain : false, qos : 1 })
+        					}
+
+        					console.log(" - action: " + action.mqtt_topic_set + " -> " + msg)
+        					mqttc.publish(action.mqtt_topic_set, msg, { retain : false, qos : 1 })
+        					
+        			    } // end of toggle
+        			    
+        			    if (action.mqtt_action =="oneshot") {
+        			        msg = action.mqtt_payload
+        			        console.log(" - action: " + action.mqtt_topic_set + " -> " + msg)
+        			        mqttc.publish(action.mqtt_topic_set, msg, { retain : false, qos : 1 })
+        			    }
+        					
+					}
+					
 				}
 			} // else console.log("ignoring message; payload did not match event payload")
 		} else { // if topic==event
@@ -101,5 +145,11 @@ mqttc.on('message', function (topic, message) {
 		
 	}
 
+}) // mqtt message
 
-})
+// handle SIGINT for graceful restarts with
+// process management daemons such as pm2
+process.on('SIGINT', function() {
+	console.log("received SIGINT; exiting")
+	process.exit()
+});

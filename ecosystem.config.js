@@ -6,12 +6,6 @@ module.exports = {
     error_file: 'err.log',
     out_file: 'out.log',
     time: true,
-    env: {
-      NODE_ENV: "development",
-    },
-    env_production: {
-      NODE_ENV: "production",
-    }
   }]
 }
 
