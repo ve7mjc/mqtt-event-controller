@@ -1,0 +1,19 @@
+[Unit]
+Description=IO Mapper
+After=phidget-mqtt.service 
+Requires=phidget-mqtt.service
+
+[Service]
+Type=notify
+Environment="NODE_ENV=production"
+WorkingDirectory=/opt/iomapper
+ExecStart=/usr/bin/node /opt/iomapper/index.js
+TimeoutStartSec=30
+NotifyAccess=all
+Restart=always
+WatchdogSec=4
+
+User=mcurrie
+
+[Install]
+WantedBy=multi-user.target
