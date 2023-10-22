@@ -16,6 +16,10 @@ const recipesFile = "./recipes.json"
 const assert = require('assert')
 const mqtt = require('mqtt')
 
+// SystemD Notify
+// https://www.npmjs.com/package/sd-notify
+const notify = require('sd-notify')
+
 var recipes = []
 var subscriptions = []
 
@@ -49,9 +53,10 @@ const loadRecipes = function() {
 	}
 
 }
-loadRecipes()
 
+loadRecipes()
 const mqttc = mqtt.connect('mqtt://localhost')
+
 mqttc.on('connect', function () {
 	console.log("Connected to mqtt broker")
 
@@ -59,6 +64,10 @@ mqttc.on('connect', function () {
 		// console.log("subscribing to topic: " + subscription)
 		mqttc.subscribe(subscription)
 	}
+
+	// we are ready
+	notify.ready()
+	notify.startWatchdogMode(2800)
 	// client.publish('presence', 'Hello mqtt')
 })
 
